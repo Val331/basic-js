@@ -20,13 +20,57 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(value) {
+      this.value = value
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(str, key) {
+      if (arguments.length < 2 || arguments[0] == undefined || arguments[1] == undefined) throw new Error('Incorrect arguments!');
+      const a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let strUpp = str.toUpperCase();
+      let keyPad = key.padEnd(str.length, key);
+      let newArr = [];
+      let t = 0;
+      let arr = strUpp.split('');
+      arr.forEach((item,i) => {
+          if(a.includes(item)) newArr.push(keyPad[t++]);
+          else newArr.push(item);
+      })
+      let keyUpp = newArr.join('').toUpperCase();
+      let result = '';
+      for (let i = 0; i < strUpp.length; i++) {
+          if (a.includes(strUpp[i])) {
+              result += a[(a.indexOf(strUpp[i]) + a.indexOf(keyUpp[i])) % 26]
+          } else {
+              result += strUpp[i];
+          }
+      }
+      if (this.value !== false) return result;
+      else return result.split('').reverse().join('');
+  }
+  
+  decrypt(str, key) {
+    if (arguments.length < 2 || arguments[0] == undefined || arguments[1] == undefined) throw new Error('Incorrect arguments!');
+      const a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let strUpp = str.toUpperCase();
+      let keyPad = key.padEnd(str.length, key);
+      let newArr = [];
+      let t = 0;
+      let arr = strUpp.split('');
+      arr.forEach((item,i) => {
+          if(a.includes(item)) newArr.push(keyPad[t++]);
+          else newArr.push(item);
+      })
+      let keyUpp = newArr.join('').toUpperCase();
+      let result = '';
+      for (let i = 0; i < strUpp.length; i++) {
+          if (a.includes(strUpp[i])) {
+              result += a[(a.indexOf(strUpp[i]) - a.indexOf(keyUpp[i]) + 26) % 26]
+          } else {
+              result += strUpp[i];
+          }
+      }
+      if (this.value !== false) return result;
+      else return result.split('').reverse().join('');
   }
 }
 
